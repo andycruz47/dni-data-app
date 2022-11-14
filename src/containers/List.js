@@ -7,18 +7,19 @@ const List = () => {
   const [state, setState] = useState({
     data: [],
     loading: true,
-    searchTerm: "",
+    firstName: "",
+    lastName: "",
     error: "",
   });
 
-  const getMovie = async () => {
+  const getperson = async () => {
     // search
-    const res = await fetch(`${API}&s=batman`);
+    const res = await fetch(`${API}s`);
     const resJSON = await res.json();
 
     if (resJSON) {
       setState({
-        data: resJSON.Search,
+        data: [],
         loading: false,
         error: "",
       });
@@ -26,29 +27,30 @@ const List = () => {
   };
 
   useEffect(() => {
-    // const res = await fetch("../../assets/data.json");
-    getMovie();
+    getperson();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (state.searchTerm === "") {
-      return setState({ ...state, error: "Please write a valid text" });
+    if (state.firstName === "" || state.lastName === "") {
+    return setState({ ...state, error: "Please write a valid text" });
     }
+    
+    const response = await fetch(`${API}/firstname/${state.firstName}/lastname/${state.lastName}`);
+    const dataJson = await response.json();
 
-    const response = await fetch(`${API}&s=${state.searchTerm}`);
-    const data = await response.json();
-
-    if (!data.Search) {
-      return setState({ ...state, error: "There are no results." });
+    if (dataJson.message==='person not found'){
+      return setState({ ...state, error: "There are no results." });   
+    }else{
+      return setState({
+        data: [dataJson],
+        firstName: "",
+        lastName: "",
+        error: "",
+      });
     }
-
-    return setState({
-      data: data.Search,
-      searchTerm: "",
-      error: "",
-    });
+  
   };
 
   const { data, loading } = state;
@@ -65,21 +67,32 @@ const List = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Search"
-              onChange={(e) => setState({...state, searchTerm: e.target.value })}
-              value={state.searchTerm}
+              placeholder="Nombres"
+              onChange={(e) => setState({...state, firstName: e.target.value })}
+              value={state.firstName}
               autoFocus
             />
+          </form>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Apellidos"
+              onChange={(e) => setState({...state, lastName: e.target.value })}
+              value={state.lastName}
+              />
           </form>
           <p className="text-white">{state.error ? state.error : ""}</p>
         </div>
       </div>
-      <div className="row pt-2">
-        {data.map((movie, i) => (
-          <Card movie={movie} key={i} />
+      <div className="row justify-content-center">
+      
+        {data.map((person, id) => (
+          <Card person={person} key={id} />
         ))}
       </div>
     </>
+    
   );
 };
 
