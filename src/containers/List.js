@@ -39,12 +39,13 @@ const List = () => {
     
     const response = await fetch(`${API}/firstname/${state.firstName}/lastname/${state.lastName}`);
     const dataJson = await response.json();
+    const person = JSON.parse(dataJson.contents)
 
-    if (dataJson.message==='person not found'){
+    if (person.message==='person not found'){
       return setState({ ...state, error: "There are no results." });   
     }else{
       return setState({
-        data: [dataJson],
+        data: [person],
         firstName: "",
         lastName: "",
         error: "",
