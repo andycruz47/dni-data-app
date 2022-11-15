@@ -32,5 +32,4 @@
     "html-webpack-plugin": "^4.5.0",
     "style-loader": "^2.0.0"
   }
-  
 }
