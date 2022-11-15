@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "https://andycruz47.github.io/dni-data-app",
   "scripts": {
-    "start": "webpack serve",
-    "production": "webpack --mode production"
+    "predeploy":"webpack --mode production",
+    "deploy":"gh-pages -d dist",
+    "start": "webpack serve"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bootswatch": "^4.5.3",
+    "gh-pages": "^4.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
